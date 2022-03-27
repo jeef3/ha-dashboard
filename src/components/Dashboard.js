@@ -1,8 +1,8 @@
-import React, { Component } from 'react';
-import { ThemeProvider } from '@emotion/react'
-import { Controls } from './Controls';
-import { Panel } from './Panel';
-import { theme } from '../styles/theme';
+import React, { Component } from "react";
+import { ThemeProvider } from "@emotion/react";
+import { Controls } from "./Controls";
+import { Panel } from "./Panel";
+import { theme } from "../styles/theme";
 
 class Dashboard extends Component {
   render() {
@@ -17,6 +17,8 @@ class Dashboard extends Component {
       // Panel information that Home Assistant has (including config at panel.config)
       panel,
     } = this.props;
+
+    console.log("hass", hass);
 
     return (
       <ThemeProvider theme={theme}>

@@ -1,13 +1,15 @@
-html, body, .App {
+html,
+body,
+.App {
   height: 100%;
   width: 100%;
   margin: 0;
   padding: 0;
-  font-family: 'SF UI Display';
+  font-family: "SF UI Display";
 }
 
-.App { 
-  background: url('./resources/background1.png') no-repeat center center fixed; 
+.App {
+  background: url("./resources/nz-sunset.jpg") no-repeat center center fixed;
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
@@ -16,7 +18,7 @@ html, body, .App {
 }
 
 .App-bg {
-  background: url('./resources/background1.png') no-repeat center center fixed; 
+  background: url("./resources/background22.png") no-repeat center center fixed;
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
@@ -57,16 +59,15 @@ html, body, .App {
   transform-origin: center;
 }
 
-
 .ReactModal__Overlay {
   opacity: 0;
   transition: opacity 200ms ease-in-out;
 }
 
-.ReactModal__Overlay--after-open{
+.ReactModal__Overlay--after-open {
   opacity: 1;
 }
 
-.ReactModal__Overlay--before-close{
+.ReactModal__Overlay--before-close {
   opacity: 0;
 }

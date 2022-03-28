@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "@emotion/styled";
+import { motion } from "framer-motion";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMoon } from "@fortawesome/free-solid-svg-icons";
 import { Title } from "./Title";
@@ -44,18 +45,20 @@ const Components = styled.div`
 
 export function Controls(props) {
   const { hass } = props;
-  console.log("Controls.render()");
   return (
     <ControlsContainer>
       <ControlsLeft>
         <ControlsSection>
           <Title>Home</Title>
           <Components>
-            <LightCard
-              hass={hass}
-              entityId="light.lifx_mini_31f37d"
-              icon="lamp"
-            />
+            <motion.div layoutId="light-card">
+              <LightCard
+                hass={hass}
+                entityId="light.lifx_mini_31f37d"
+                icon="lamp"
+                onLongPress={props.onShowMenu}
+              />
+            </motion.div>
             <LightCard
               hass={hass}
               entityId="light.tv_backlight"

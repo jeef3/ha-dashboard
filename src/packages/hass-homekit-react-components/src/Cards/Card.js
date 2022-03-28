@@ -35,6 +35,7 @@ const Container = styled.button`
   font-weight: 500;
 
   border: 0;
+  border-radius: 16px;
   background: ${({ active }) => (active ? "#ffffff" : "rgba(0, 0, 0, 0.4)")};
   backdrop-filter: blur(20px);
 

@@ -5,7 +5,7 @@ import Lamp from "./Lamp";
 import LedStrip from "./LedStrip";
 import Card from "./Card";
 
-const HassLightCard = ({ hass, entityId, icon }) => {
+const HassLightCard = ({ hass, entityId, icon, onLongPress }) => {
   const entity = hass.states[entityId];
   const { friendly_name, brightness } = entity.attributes;
   const on =
@@ -17,7 +17,9 @@ const HassLightCard = ({ hass, entityId, icon }) => {
     hass.callService("light", "toggle", { entity_id: entityId });
   }, [hass, entityId]);
 
-  const handleLongPress = useCallback(() => {}, [hass]);
+  const handleLongPress = useCallback(() => {
+    onLongPress();
+  }, [hass]);
 
   function handlePercentageChange(value) {
     const brightness = Math.floor((value * 255) / 100);

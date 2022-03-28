@@ -1,5 +1,8 @@
 import React from "react";
 import { ThermostatCard } from "homekit-react-components";
+import AirConditionerOff from "./AirConditionerOff";
+
+import Card from "./Card";
 
 export function HassThermostatCard(props) {
   const entity = props.hass.states[props.entityId];
@@ -22,15 +25,27 @@ export function HassThermostatCard(props) {
   }
 
   return (
-    <React.Fragment>
-      <ThermostatCard
-        name={friendly_name}
-        currentMode={isActive ? "Heat" : "Off"}
-        currentTemperature={current_temperature}
-        targetTemperature={temperature ?? 24}
-        onModeChange={handleModeChange}
-        onTemperatureChange={handleTemperatureChange}
-      />
-    </React.Fragment>
+    <Card
+      active={isActive}
+      icon={<AirConditionerOff />}
+      room=""
+      name={friendly_name}
+      status={"Off"}
+      error={entity.status === "unavailable"}
+      onPress={() => console.log("press")}
+      onLongPress={() => console.log("long press")}
+    />
   );
+  // return (
+  //   <React.Fragment>
+  //     <ThermostatCard
+  //       name={friendly_name}
+  //       currentMode={isActive ? "Heat" : "Off"}
+  //       currentTemperature={current_temperature}
+  //       targetTemperature={temperature ?? 24}
+  //       onModeChange={handleModeChange}
+  //       onTemperatureChange={handleTemperatureChange}
+  //     />
+  //   </React.Fragment>
+  // );
 }

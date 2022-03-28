@@ -84,14 +84,9 @@ const HassLightCard = ({ hass, entityId, icon }) => {
   const pressTimer = useRef();
   const pressTime = useRef();
 
-  const [localState, setLocalState] = useState(entity.state);
-
   const handlePress = useCallback(() => {
-    setLocalState(entity.state === "on" ? "off" : "on");
-    hass.callService("light", "toggle", {
-      entity_id: entityId,
-    });
-  }, [hass]);
+    hass.callService("light", "toggle", { entity_id: entityId });
+  }, [hass, entityId]);
 
   const handleLongPress = useCallback(() => {}, [hass]);
 
@@ -113,13 +108,9 @@ const HassLightCard = ({ hass, entityId, icon }) => {
     });
   }
 
-  useEffect(() => {
-    setLocalState(hass.state[entityId].state);
-  }, [hass]);
-
   return (
     <Card
-      active={localState === "on"}
+      active={entity.state === "on"}
       onTouchStart={handlePressStart}
       onTouchEnd={handlePressEnd}
       onMouseDown={handlePressStart}

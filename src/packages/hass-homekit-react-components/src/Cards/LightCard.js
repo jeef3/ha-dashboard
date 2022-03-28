@@ -1,15 +1,34 @@
-import React from "react";
+import React, { useState, useCallback, useRef, useEffect } from "react";
 import { LightCard } from "homekit-react-components";
-import styled from "styled-components";
+import styled, { keyframes, css } from "styled-components";
 import Lamp from "./Lamp";
+import LedStrip from "./LedStrip";
 
 const IconContainer = styled.div``;
+
+const pressedAnimation = keyframes`
+  from {
+    transform: scale(1);
+  }
+
+  20% {
+    transform: scale(0.90);
+  }
+
+  to {
+    transform: scale(1.08);
+  }
+`;
 
 const Card = styled.button`
   width: 138px;
   height: 138px;
   padding: 16px;
   margin: 0;
+
+  touch-callout: none;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
 
   cursor: pointer;
   color: ${({ active }) => (active ? "#000000" : "rgba(255, 255, 255, 0.4)")};
@@ -30,7 +49,15 @@ const Card = styled.button`
   justify-items: start;
   justify-content: start;
 
-  transition: all ease-in-out 200ms;
+  transition: all ease-out 100ms;
+
+  :active {
+    transition-timing-function: cubic-bezier(0.3, -2.8, 0.3, 1);
+    transition-duration: 600ms;
+    transition-delay: 200ms;
+
+    transform: scale(1.08);
+  }
 
   ${IconContainer} {
     & > svg {
@@ -46,31 +73,60 @@ const Card = styled.button`
   }
 `;
 
-export function HassLightCard(props) {
-  const entity = props.hass.states[props.entityId];
+const HassLightCard = ({ hass, entityId, icon }) => {
+  const entity = hass.states[entityId];
   const { friendly_name, brightness } = entity.attributes;
   const on =
     entity.state && entity.state !== "off" && entity.state !== "unavailable";
   const unavailable = entity.state === "unavailable";
   const brightnessPercentage = Math.floor((brightness * 100) / 255);
-  function handleToggle() {
-    props.hass.callService("light", "toggle", {
-      entity_id: entity.entity_id,
+
+  const pressTimer = useRef();
+  const pressTime = useRef();
+
+  const [localState, setLocalState] = useState(entity.state);
+
+  const handlePress = useCallback(() => {
+    setLocalState(entity.state === "on" ? "off" : "on");
+    hass.callService("light", "toggle", {
+      entity_id: entityId,
     });
-  }
+  }, [hass]);
+
+  const handleLongPress = useCallback(() => {}, [hass]);
+
+  const handlePressStart = useCallback(() => {
+    pressTime.current = Date.now();
+    pressTimer.current = setTimeout(() => handleLongPress(), 600);
+  }, [pressTime, pressTimer]);
+
+  const handlePressEnd = useCallback(() => {
+    clearTimeout(pressTimer.current);
+    if (Date.now() - pressTime.current < 600) handlePress();
+  }, [pressTime, pressTimer]);
 
   function handlePercentageChange(value) {
     const brightness = Math.floor((value * 255) / 100);
-    props.hass.callService("light", "turn_on", {
-      entity_id: props.entityId,
+    hass.callService("light", "turn_on", {
+      entity_id: entityId,
       brightness: brightness,
     });
   }
 
+  useEffect(() => {
+    setLocalState(hass.state[entityId].state);
+  }, [hass]);
+
   return (
-    <Card active={on}>
+    <Card
+      active={localState === "on"}
+      onTouchStart={handlePressStart}
+      onTouchEnd={handlePressEnd}
+      onMouseDown={handlePressStart}
+      onMouseUp={handlePressEnd}
+    >
       <IconContainer>
-        <Lamp size={32} />
+        {icon === "lamp" ? <Lamp size={32} /> : <LedStrip size={32} />}
       </IconContainer>
       <div>
         <div>{friendly_name}</div>
@@ -105,4 +161,5 @@ export function HassLightCard(props) {
   //     }}
   //   />
   // );
-}
+};
+export { HassLightCard };

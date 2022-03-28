@@ -37,11 +37,9 @@ const CardContainers = styled.div`
 `;
 
 const Components = styled.div`
-  /* display: flex; */
-
-  & > div {
-    margin: 5px 5px 5px 0px;
-  }
+  display: grid;
+  gap: 8px;
+  grid-auto-flow: column;
 `;
 
 export function Controls(props) {
@@ -58,7 +56,11 @@ export function Controls(props) {
               entityId="light.lifx_mini_31f37d"
               icon="lamp"
             />
-            <LightCard hass={hass} entityId="light.tv_backlight" />
+            <LightCard
+              hass={hass}
+              entityId="light.tv_backlight"
+              icon="led-strip"
+            />
             <ThermostatCard hass={hass} entityId="climate.air_conditioner" />
           </Components>
         </ControlsSection>
